@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Complex Numbers: Class 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap">
+<style>
+:root{--paper:#fbfaf6;--ink:#1b1b1b;--grey:#8b8b86;--soft:#e8e6df;--hi:#2f5fd0;--bar:#e8e6df;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17171a;--ink:#f1efe8;--grey:#9a9a94;--soft:#2a2a2f;--hi:#7da2ff;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#17171a;--ink:#f1efe8;--grey:#9a9a94;--soft:#2a2a2f;--hi:#7da2ff;color-scheme:dark}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:"Patrick Hand","Comic Sans MS",cursive,sans-serif;font-size:clamp(19px,2.3vw,34px);line-height:1.35}
+h1,h2{font-family:Bangers,Impact,sans-serif;font-weight:400;letter-spacing:.03em;margin:0}
+h1{font-size:clamp(40px,8vw,120px);line-height:1}
+h2{font-size:clamp(30px,5vw,68px);line-height:1.05;margin-bottom:1vh}
+p{margin:0 0 .5em}
+.deck{position:absolute;inset:0 0 calc(56px + env(safe-area-inset-bottom,0px)) 0}
+.slide{position:absolute;inset:0;padding:1.5vh 4vw;display:none;flex-direction:column;overflow:auto}
+.slide.on{display:flex}
+.cols{display:grid;grid-template-columns:1.1fr 1fr;gap:3vw;align-items:center;flex:1;min-height:0}
+@media(max-width:800px){.cols{grid-template-columns:1fr}}
+.sub{color:var(--grey)}
+.eq{font-family:Georgia,"Times New Roman",serif;font-size:1.15em;margin:.3em 0;overflow-x:auto}
+.big{font-size:1.5em}
+i.v{font-family:Georgia,serif}
+.panel{border:3px solid var(--ink);padding:1vh 1.4vw;margin:1vh 0;background:var(--paper)}
+.panel.tint{background:var(--soft)}
+.bubble{position:relative;border:3px solid var(--ink);border-radius:22px;padding:.4em .9em;background:var(--paper);margin-bottom:22px}
+.bubble::after{content:"";position:absolute;left:46px;bottom:-14px;width:20px;height:20px;background:var(--paper);border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.toon{width:min(24vw,150px);animation:bob 2.6s ease-in-out infinite}
+.toonwrap{display:flex;flex-direction:column;align-items:flex-start}
+@keyframes bob{50%{transform:translateY(-8px) rotate(2deg)}}
+svg[id],.toon svg{display:block;width:100%;height:auto;max-height:62vh}
+mjx-container{color:inherit}
+svg text{fill:var(--ink);font-family:"Patrick Hand",sans-serif;font-size:20px}
+.grid{stroke:var(--soft);stroke-width:1}
+.ax{stroke:var(--grey);stroke-width:2}
+.ln{stroke:var(--ink);stroke-width:4;fill:none}
+.dash{stroke:var(--grey);stroke-width:2;stroke-dasharray:6 5;fill:none}
+.hi{stroke:var(--hi);stroke-width:4;fill:none}
+.dotb{fill:var(--hi)}
+.ghost{fill:var(--grey)}
+.toon text{fill:#fff;font-family:Bangers,sans-serif;font-size:22px}
+.toon .fl{fill:var(--paper)}.toon .st{stroke:var(--ink);stroke-width:3;fill:none;stroke-linecap:round}
+.parab{stroke:var(--hi);stroke-width:4;fill:none;stroke-dasharray:1;stroke-dashoffset:1}
+.slide.on .parab{animation:draw 2.2s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.frag{opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .4s,transform .4s}
+.frag.show{opacity:1;visibility:visible;transform:none}
+button{font:inherit;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:.2em .8em;cursor:pointer;margin:.2em .3em .2em 0}
+button:hover,button.act{background:var(--hi);color:#fff;border-color:var(--hi)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--hi)}
+.hl{color:var(--hi)}.chat{display:flex;flex-direction:column;gap:1.2vh;margin-top:1.5vh}.row{display:flex;align-items:center;gap:14px}.row.r{flex-direction:row-reverse}.row .toon{width:min(9vw,78px);flex:0 0 auto}
+.say{position:relative;border:3px solid var(--ink);border-radius:18px;padding:.25em .8em;background:var(--paper);flex:1;font-size:.82em}
+.say::before{content:"";position:absolute;left:-11px;top:50%;width:14px;height:14px;margin-top:-7px;background:var(--paper);border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.row.r .say{background:var(--soft)}.row.r .say::before{left:auto;right:-11px;transform:rotate(-135deg);background:var(--soft)}
+.cast{display:flex;align-items:flex-end;gap:2vw}
+.gx .dr{stroke:var(--ink);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1}.slide.on .gx .dr{animation:draw 1s ease forwards}
+.gx .fd{opacity:0}.slide.on .gx .fd{animation:fadein .5s both}input[type=number]{font:inherit;width:4.5em;background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:8px;padding:.05em .3em}.dotk{fill:var(--ink)}.ringb{fill:none;stroke:var(--hi);stroke-width:4}.fam .ring{stroke:var(--ink);stroke-width:3;fill:var(--hi);fill-opacity:.12;transform-box:fill-box;transform-origin:center;transform:scale(0)}.fam text{opacity:0}.slide.on .fam .ring{animation:grow .8s cubic-bezier(.3,1.4,.5,1) both}.slide.on .fam text{animation:fadein .5s .2s both}@keyframes grow{from{transform:scale(0)}to{transform:scale(1)}}@keyframes fadein{to{opacity:1}}.bad{color:#d1432e}ul.pl{margin:.2em 0;padding-left:1.1em}.small{font-size:.82em}
+nav{position:fixed;left:0;right:0;bottom:0;height:calc(56px + env(safe-area-inset-bottom,0px));padding:0 3vw env(safe-area-inset-bottom,0px);display:flex;align-items:center;gap:10px;background:var(--soft);border-top:3px solid var(--ink);font-size:20px}
+nav .sp{flex:1}
+nav button{margin:0;padding:.05em .8em}
+ol{padding-left:1.2em;margin:0}li{margin:.35em 0}
+.char{overflow:visible}.toon,#mc{perspective:600px}
+.char .arm{transition:transform .5s}.char .head{transform-origin:60px 72px}
+.pose-idle .al{animation:sw 3s ease-in-out infinite alternate}.pose-idle .ar{animation:sw 3.4s ease-in-out infinite alternate-reverse}
+@keyframes sw{from{transform:rotate(4deg)}to{transform:rotate(-5deg)}}
+.pose-wave .ar{animation:wv .6s ease-in-out infinite alternate}
+@keyframes wv{from{transform:rotate(-135deg)}to{transform:rotate(-175deg)}}
+.pose-point .al{animation:pt 1s ease-in-out infinite alternate}
+@keyframes pt{from{transform:rotate(78deg)}to{transform:rotate(92deg)}}
+.pose-cheer{animation:hop .9s ease-in-out infinite}.pose-cheer .al{transform:rotate(150deg)}.pose-cheer .ar{transform:rotate(-150deg)}
+@keyframes hop{50%{transform:translateY(-14px)}}
+.pose-think .head{animation:tilt 2.4s ease-in-out infinite alternate}.pose-think .ar{transform:rotate(-25deg)}
+@keyframes tilt{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
+.eye{transform-box:fill-box;transform-origin:center;animation:bl 4.5s infinite}
+@keyframes bl{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+.m2{display:none}.wow .m1{display:none}.wow .m2{display:block}
+.char.spin{animation:spin .9s ease}@keyframes spin{to{transform:rotateY(360deg)}}
+.char.hop1{animation:hop1 .6s ease}@keyframes hop1{40%{transform:translateY(-26px) scale(1.04)}}
+.mascot{position:fixed;right:1.2vw;bottom:calc(60px + env(safe-area-inset-bottom,0px));width:min(11vw,120px);z-index:5;pointer-events:none}
+.mb{position:absolute;right:0;bottom:100%;margin-bottom:14px;width:max-content;max-width:min(24vw,280px);font-size:.7em;border:3px solid var(--ink);border-radius:16px;padding:.3em .7em;background:var(--paper);animation:pop .4s ease,fo .5s ease 7s forwards}
+.mb::after{content:"";position:absolute;right:30px;bottom:-10px;width:14px;height:14px;background:var(--paper);border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}@keyframes fo{to{opacity:0;visibility:hidden}}
+@media(min-width:901px){.slide{padding-right:calc(4vw + min(11vw,120px))}}
+@media(max-width:900px){.mascot{display:none!important}}
+@media(prefers-reduced-motion:reduce){.char,.char *{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.toon{animation:none}.frag{transition:none}.slide.on .parab{animation:none;stroke-dashoffset:0}}
+</style>
+<script>window.MathJax={svg:{fontCache:'global'}};</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="blob" viewBox="0 0 130 150">
+<path class="st fl" d="M32 135C8 98 20 48 62 40C104 34 114 90 92 135Z"/>
+<circle cx="52" cy="76" r="9" class="st fl"/><circle cx="76" cy="76" r="9" class="st fl"/><circle cx="55" cy="77" r="3.5" fill="#1b1b1b"/><circle cx="79" cy="77" r="3.5" fill="#1b1b1b"/>
+<path class="st" d="M50 102Q64 114 80 102M30 92Q10 96 6 114M94 90Q116 84 120 64M46 135l-6 12M80 135l8 12"/>
+<path d="M30 54Q60 14 96 48L122 54L94 60Q62 44 30 62Z" fill="#2f5fd0" stroke="#1b1b1b" stroke-width="3"/></symbol><symbol id="prof" viewBox="0 0 120 190"><g stroke="#3a2418" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M38 118L82 118L80 174L63 174L60 142L57 174L40 174Z" fill="#5d8db0"/><ellipse cx="47" cy="178" rx="15" ry="7" fill="#c8721f"/><ellipse cx="73" cy="178" rx="15" ry="7" fill="#c8721f"/><path d="M38 74L82 74L86 118L34 118Z" fill="#8cc3e6"/><rect x="35" y="113" width="50" height="7" fill="#8a4f25"/><rect x="56" y="113" width="8" height="7" fill="#e0b040"/><path d="M38 74L22 86L28 104L38 98Z" fill="#8cc3e6"/><path d="M82 74L98 86L92 104L82 98Z" fill="#8cc3e6"/><path d="M27 102Q15 114 35 118M93 102Q105 114 85 118" fill="none" stroke-width="13"/><path d="M27 102Q15 114 35 118M93 102Q105 114 85 118" fill="none" stroke="#f2b48a" stroke-width="9"/><circle cx="35" cy="118" r="7" fill="#f2b48a"/><circle cx="85" cy="118" r="7" fill="#f2b48a"/><rect x="54" y="62" width="12" height="14" fill="#e0996e"/><path d="M50 70L60 86L44 82ZM70 70L60 86L76 82Z" fill="#a9d3ee"/><path d="M56 82L64 82L63 88L57 88ZM57 88L63 88L67 112L60 119L53 112Z" fill="#f08a3c"/><circle cx="30" cy="42" r="7" fill="#e8a47a"/><circle cx="90" cy="42" r="7" fill="#e8a47a"/><ellipse cx="60" cy="40" rx="30" ry="32" fill="#f2b48a"/><path d="M30 36Q26 10 52 9L55 1L63 9L72 1L76 10Q98 12 90 36Q86 22 76 20Q60 26 44 20Q34 24 30 36Z" fill="#6b3f24"/><path d="M41 28Q49 21 56 27M64 27Q71 21 79 28" fill="none" stroke="#6b3f24" stroke-width="3"/><ellipse cx="49" cy="37" rx="8" ry="9" fill="#fff"/><ellipse cx="71" cy="37" rx="8" ry="9" fill="#fff"/><circle cx="50" cy="38" r="4.5" fill="#8a4f25" stroke="none"/><circle cx="72" cy="38" r="4.5" fill="#8a4f25" stroke="none"/><circle cx="50" cy="38" r="2" fill="#1b1b1b" stroke="none"/><circle cx="72" cy="38" r="2" fill="#1b1b1b" stroke="none"/><circle cx="51.5" cy="36" r="1.2" fill="#fff" stroke="none"/><circle cx="73.5" cy="36" r="1.2" fill="#fff" stroke="none"/><ellipse cx="60" cy="47" rx="5" ry="4" fill="#e8a47a"/><path d="M45 54Q60 72 75 54Q60 58 45 54Z" fill="#7a1f1f"/><path d="M48 55.5Q60 60 72 55.5L71 58Q60 62 49 58Z" fill="#fff" stroke="none"/><circle cx="39" cy="52" r="4" fill="#f08a7a" stroke="none" opacity=".5"/><circle cx="81" cy="52" r="4" fill="#f08a7a" stroke="none" opacity=".5"/></g></symbol></defs></svg>
+
+<div class="deck">
+
+<section class="slide on"><div class="cols"><div><h1>Complex Numbers</h1><p class="sub">Class 1</p>
+<p class="frag">“Mathematics is the Queen of Sciences and Arithmetic is the Queen of Mathematics.” <b>– Gauss</b></p></div>
+<div class="toonwrap"><div class="bubble">Hi! Today we meet a number whose square is −1.</div>
+<div class="cast"><div class="toon" data-char="girl" data-pose="idle" style="width:min(14vw,130px)"></div><div class="toon" data-pose="wave" style="width:min(20vw,190px)"></div><div class="toon" data-char="iota" data-pose="cheer" style="width:min(12vw,110px)"></div></div></div></div></section>
+
+<section class="slide"><h2>Today’s plan</h2><div class="small"><ol>
+<li class="frag">Why complex numbers? Meet iota (\(i\)).</li>
+<li class="frag">What a complex number is, equality, and the rules to be careful with.</li>
+<li class="frag">Integral powers of \(i\).</li>
+<li class="frag">Add, subtract, multiply and divide.</li>
+<li class="frag">Practice.</li></ol>
+<p class="frag sub">Next class: square roots of complex numbers.</p></div></section>
+
+<section class="slide"><h2>Warm-up: squares of real numbers</h2><div class="cols"><svg id="pnl"></svg><div class="small">
+<input type="range" id="sx" min="-300" max="300" value="150" aria-label="x"><p>x = <b id="sxv"></b>, x² = <b id="sxs"></b></p>
+<p class="frag">Whatever real \(x\) you pick, \(x^2\ge0\). The parabola never dips below the axis.</p>
+<div class="panel tint frag">Can \(x^2=-1\)? The line \(y=-1\) never meets the curve. <b class="hl">So there is no real solution.</b></div></div></div></section>
+
+<section class="slide"><h2>Warm-up: algebra toolkit</h2><div class="cols"><div class="small">
+<div class="panel tint"><b>Identities</b><div class="eq small">\((a\pm b)^2=a^2\pm2ab+b^2,\quad (a+b)(a-b)=a^2-b^2\)</div></div>
+<div class="panel frag"><b>Rationalising</b><div class="eq small">\(\dfrac1{\sqrt2+1}=\dfrac{\sqrt2-1}{(\sqrt2+1)(\sqrt2-1)}=\sqrt2-1\)</div></div></div>
+<div class="small"><div class="panel tint frag"><b>Quadratic formula</b><div class="eq small">\(x=\dfrac{-b\pm\sqrt D}{2a},\quad D=b^2-4ac\)</div>If \(D\lt0\), there are no real roots.</div></div></div><div class="chat"><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">Why multiply by \(\sqrt2-1\)?</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="point"></div><div class="say">To get rid of the root in the denominator. The same trick will work with \(i\)!</div></div></div></section>
+
+<section class="slide"><h2>Why do we need them?</h2><div class="cols"><div>
+<p>Equations like \(x^2+1=0\) and \(x^2+4=0\) are not solvable in \(\mathbb R\): no real number has a negative square.</p>
+<p class="frag">Euler was the first mathematician to introduce the symbol \(i\) (iota) for \(\sqrt{-1}\), with \(i^2=-1\). He also called it the <b>imaginary number</b>.</p></div>
+<div><svg id="p2"></svg><p class="sub" style="text-align:center">y = x² + 1 never touches the x-axis</p></div></div><div class="chat"><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">So \(x^2=-1\) is simply impossible?</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="cheer"></div><div class="say">Only inside the real numbers. So we build a bigger system!</div></div></div></section>
+
+<section class="slide"><h2>Meet iota: a new direction</h2><div class="cols"><svg id="pax" class="gx" viewBox="0 0 600 440">
+<line class="dr" pathLength="1" x1="40" y1="300" x2="570" y2="300"/>
+<line class="dr" pathLength="1" style="animation-delay:1.2s" x1="200" y1="425" x2="200" y2="20"/>
+<text class="fd" style="animation-delay:.8s" x="572" y="326">Re</text><text class="fd" style="animation-delay:2s" x="210" y="30">Im</text>
+<text class="fd" style="animation-delay:.9s" x="276" y="326">1</text><text class="fd" style="animation-delay:1s" x="356" y="326">2</text><text class="fd" style="animation-delay:1.1s" x="436" y="326">3</text>
+<text class="fd" style="animation-delay:2.2s" x="172" y="226">i</text><text class="fd" style="animation-delay:2.3s" x="160" y="146">2i</text>
+<line class="dash fd" style="animation-delay:3s" x1="440" y1="140" x2="440" y2="300"/><line class="dash fd" style="animation-delay:3s" x1="200" y1="140" x2="440" y2="140"/>
+<circle class="dotb fd" style="animation-delay:3.2s" cx="440" cy="140" r="10"/><text class="fd" style="animation-delay:3.3s" x="452" y="130">3 + 2i</text></svg>
+<div class="small"><div class="toonwrap"><div class="bubble">I’m <i class="v">i</i>. Real numbers live on one line. I bring a second direction, at 90°!</div><div class="toon" data-char="iota" data-pose="wave" style="width:min(18vw,150px)"></div></div>
+<p class="frag">\(i^2=-1\). Now numbers like \(3+2i\) fill a whole plane.</p></div></div></section>
+
+<section class="slide"><h2>What is a complex number?</h2><div class="cols"><div class="small">
+<div class="panel tint"><div class="eq">\(\mathbb C=\{x+iy:\ x,y\in\mathbb R,\ i=\sqrt{-1}\}\)</div></div>
+<p>e.g. \(5+3i,\ -1+i,\ 0+4i,\ 0+0i\)</p>
+<p class="frag">\(x\) is the real part \(\operatorname{Re}(z)\), \(y\) is the imaginary part \(\operatorname{Im}(z)\). For \(z=3-4i\): \(\operatorname{Re}(z)=3\), \(\operatorname{Im}(z)=-4\).</p></div>
+<div class="small"><div class="panel frag"><b>Purely real:</b> \(\operatorname{Im}(z)=0\).<br><b>Purely imaginary:</b> \(\operatorname{Re}(z)=0\).</div>
+<div class="panel tint frag">The sign \(+\) is not ordinary addition, and \(i\) is not a number to add. They are part of the scheme that writes the pair \((x,y)\) as one number.</div></div></div></section>
+
+<section class="slide"><h2>The number family</h2><div class="cols"><svg id="pn" class="fam" viewBox="0 0 600 440">
+<ellipse class="ring" style="animation-delay:2s" cx="300" cy="220" rx="280" ry="205"/>
+<ellipse class="ring" style="animation-delay:1.5s" cx="300" cy="220" rx="225" ry="165"/>
+<ellipse class="ring" style="animation-delay:1s" cx="300" cy="220" rx="170" ry="125"/>
+<ellipse class="ring" style="animation-delay:.5s" cx="300" cy="220" rx="115" ry="86"/>
+<ellipse class="ring" cx="300" cy="220" rx="62" ry="45"/>
+<text x="300" y="228" text-anchor="middle">Naturals</text><text x="300" y="250" text-anchor="middle" style="font-size:16px">1, 2, 3</text>
+<text x="300" y="158" text-anchor="middle" style="animation-delay:.5s">Integers: −2</text>
+<text x="300" y="122" text-anchor="middle" style="animation-delay:1s">Rationals: ½</text>
+<text x="300" y="84" text-anchor="middle" style="animation-delay:1.5s">Reals: √2, π</text>
+<text x="300" y="44" text-anchor="middle" style="animation-delay:2s">Complex: 2 + 3i, i</text></svg>
+<div><p>Each set sits inside the next:</p><div class="eq">\(\mathbb N\subset\mathbb Z\subset\mathbb Q\subset\mathbb R\subset\mathbb C\)</div>
+<p class="frag">Every real number is complex: \(a=a+i0\).</p>
+<p class="frag">\(x^2=-1\) has a solution only in \(\mathbb C\).</p></div></div></section>
+
+<section class="slide"><h2>Equality and other rules</h2><div class="cols"><div class="small">
+<div class="panel tint"><b>Equality.</b> \(z_1=a_1+ib_1\) and \(z_2=a_2+ib_2\) are equal if \(a_1=a_2\) and \(b_1=b_2\), that is, \(\operatorname{Re}z_1=\operatorname{Re}z_2\) and \(\operatorname{Im}z_1=\operatorname{Im}z_2\).</div>
+<div class="panel frag"><b class="bad">No inequalities.</b> \(a+ib\gt c+id\) is meaningful only if \(b=d=0\).</div></div>
+<div class="small"><div class="panel frag"><b>Careful with zero.</b> For reals, \(a^2+b^2=0\Rightarrow a=b=0\). But for complex numbers \(z_1^2+z_2^2=0\) does <i>not</i> imply \(z_1=z_2=0\):
+<div class="eq small">\(z_1=1+i,\ z_2=1-i:\ \ 2i+(-2i)=0\)</div></div>
+<div class="panel tint frag">But if \(z_1z_2=0\), at least one of them must be 0, as for real numbers.</div></div></div></section>
+
+<section class="slide"><h2>Square roots of negatives</h2><div class="cols"><div><svg id="psq"></svg><button id="bq">Square them!</button><button id="rq">Reset</button></div><div class="small">
+<p>For \(a\gt0\): \(\sqrt{-a}=\sqrt{-1}\,\sqrt a=i\sqrt a\).</p>
+<div class="panel frag"><b class="bad">Trap!</b> \(\sqrt a\sqrt b=\sqrt{ab}\) is valid only if at least one of \(a,b\) is non-negative. If both are negative, \(\sqrt a\sqrt b=-\sqrt{|a|\,|b|}\).</div>
+<div class="panel tint frag"><b class="hl">Illustration 1</b> \(\sqrt{-2}\sqrt{-3}=(i\sqrt2)(i\sqrt3)=i^2\sqrt6=-\sqrt6\)</div></div></div></section>
+
+<section class="slide"><h2>Doubt corner</h2><div class="chat"><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">\(\sqrt{-2}\cdot\sqrt{-3}=\sqrt{(-2)(-3)}=\sqrt6\). Easy!</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="point"></div><div class="say">Careful! That rule needs at least one non-negative number. Convert to \(i\) first.</div></div><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">So \(\sqrt{-2}\sqrt{-3}=(i\sqrt2)(i\sqrt3)\)…</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="cheer"></div><div class="say">\(=i^2\sqrt6=-\sqrt6\). Not \(\sqrt6\)!</div></div></div></section>
+
+<section class="slide"><h2>Integral powers of <i class="v">i</i></h2><div class="cols"><svg id="p5"></svg>
+<div class="small"><div class="eq" id="h5"></div><button id="b5">× i</button><button id="r5">Reset</button>
+<div class="panel tint frag">Write \(n=4q+r\), \(0\le r\le3\):<div class="eq">\(i^n=(i^4)^q\,i^r=i^r\)</div>\(i^{4n}=1,\ i^{4n+1}=i,\ i^{4n+2}=-1,\ i^{4n+3}=-i\)</div>
+<p class="frag">Try it: n = <input type="number" id="pw" value="35" step="1"> <span id="pwr"></span></p>
+<div class="toonwrap"><div class="bubble">Each × i is a quarter turn!</div><div class="toon" data-char="iota" data-pose="idle" style="width:min(12vw,100px)"></div></div></div></div></section>
+
+<section class="slide"><h2>Sums of powers of <i class="v">i</i></h2><div class="small">
+<p>Let \(f(m,n)=(i+i^2+i^3+\dots+i^n)^m\). Key fact: <b class="hl">four consecutive powers add to 0</b>, \(i^k+i^{k+1}+i^{k+2}+i^{k+3}=0\).</p>
+<p class="frag">(i) \(f(4k,m)=0^m=0\)</p>
+<p class="frag">(ii) \(f(4k+1,4p)=i^{4p}=1\)</p>
+<p class="frag">(iii) \(f(4k+2,4p)+f(4k+3,p)=(i-1)^{4p}+(-1)^p=(-4)^p+(-1)^p\), purely real.</p>
+<p class="frag sub">because \((i-1)^2=-2i\) and \(\left((-2i)^2\right)^p=(-4)^p\)</p></div><div class="chat"><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">That looks scary!</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="point"></div><div class="say">Group four terms at a time. Each group of four powers adds to 0.</div></div></div></section>
+
+<section class="slide"><h2>Value of a polynomial</h2><div class="small">
+<p>If \(x=3+i\), find \(x^3-3x^2-8x+15\).</p>
+<p class="frag">\(x-3=i\ \Rightarrow\ x^2-6x+10=0\)</p>
+<p class="frag">\(x^3-3x^2-8x+15=x(x^2-6x+10)+3(x^2-6x+10)-15\)</p>
+<div class="eq frag hl">\(=0+0-15=-15\)</div></div><div class="chat"><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">Do I put \(x=3+i\) straight into \(x^3\)?</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="point"></div><div class="say">You can, but it is messy. Use \(x-3=i\), square it, and look for \(x^2-6x+10\).</div></div></div></section>
+
+<section class="slide"><h2>Add and subtract</h2><div class="cols"><div>
+<p>For \(z_1=a+ib,\ z_2=c+id\):</p>
+<div class="eq">\((a+ib)+(c+id)=(a+c)+i(b+d)\)</div>
+<div class="eq frag">\((a+ib)-(c+id)=(a-c)+i(b-d)\)</div>
+<p class="frag">\((2+3i)+(1-i)=3+2i\)</p></div>
+<div class="panel tint frag small"><b>Note.</b> Addition and multiplication of complex numbers are commutative and associative. Multiplication is distributive over addition and subtraction.</div></div></section>
+
+<section class="slide"><h2>Adding as arrows</h2><div class="cols"><svg id="pa" style="touch-action:none;cursor:grab"></svg>
+<div><button id="ba">z₁ + z₂</button><button id="bs">z₁ − z₂</button>
+<p class="hl">Drag z₁ and z₂!</p>
+<div class="panel tint small"><p>z₁ = <b id="za1"></b></p><p>z₂ = <b id="za2"></b></p><p><span id="zal"></span> = <b id="zas"></b></p><p id="zad" class="hl"></p></div>
+<p class="small frag">The sum is the diagonal of the parallelogram. Subtracting means adding the opposite arrow.</p></div></div></section>
+
+<section class="slide"><h2>Multiply</h2><div class="cols"><div>
+<div class="eq">\((a+ib)(c+id)=(ac-bd)+i(ad+bc)\)</div>
+<p class="frag">\((3+i5)(2+i6)=(6-30)+i(18+10)\)</p><div class="eq frag hl">\(=-24+i28\)</div>
+<p class="frag">Tip: expand, then replace \(i^2\) with \(-1\).</p></div>
+<div class="panel tint frag small"><b>Remember:</b> \(z_1z_2=z_2z_1\), \((z_1z_2)z_3=z_1(z_2z_3)\), \(z_1(z_2\pm z_3)=z_1z_2\pm z_1z_3\).</div></div></section>
+
+<section class="slide"><h2>Conjugate of a complex number</h2><div class="cols"><div class="small">
+<p><b>Definition.</b> The conjugate of \(z=a+ib\) is \(\bar z=a-ib\): change the sign of the imaginary part.</p>
+<p class="frag">\(\overline{3+i}=3-i,\quad \overline{2-5i}=2+5i,\quad \overline{7i}=-7i,\quad \bar 4=4\)</p>
+<div class="panel tint frag"><b>Key fact:</b> a number times its conjugate is real.<div class="eq">\((a+ib)(a-ib)=a^2-i^2b^2=a^2+b^2\)</div></div>
+<p class="frag">e.g. \((3+2i)(3-2i)=9+4=13\)</p></div>
+<svg id="pcj" class="gx" viewBox="0 0 600 440">
+<line class="dr" pathLength="1" x1="40" y1="220" x2="570" y2="220"/>
+<line class="dr" pathLength="1" style="animation-delay:.6s" x1="230" y1="425" x2="230" y2="20"/>
+<text class="fd" style="animation-delay:.8s" x="572" y="246">Re</text><text class="fd" style="animation-delay:1.2s" x="240" y="30">Im</text>
+<line class="dash fd" style="animation-delay:2s" x1="440" y1="80" x2="440" y2="360"/>
+<circle class="dotb fd" style="animation-delay:1.6s" cx="440" cy="80" r="10"/><text class="fd" style="animation-delay:1.7s" x="452" y="76">z = 3 + 2i</text>
+<circle class="dotk fd" style="animation-delay:2.4s" cx="440" cy="360" r="10"/><text class="fd" style="animation-delay:2.5s" x="452" y="386">conjugate = 3 − 2i</text>
+<text class="fd" style="animation-delay:2.2s" x="262" y="206">mirror: the real axis</text></svg></div></section>
+
+<section class="slide"><h2>Divide: rationalise</h2><div class="small">
+<p>\(\dfrac{a+ib}{c+id}\), where at least one of \(c,d\) is non-zero.</p>
+<p class="frag">Multiply top and bottom by the <b>conjugate</b> \(c-id\) of the denominator.</p>
+<div class="eq frag">\(\dfrac{a+ib}{c+id}=\dfrac{(a+ib)(c-id)}{(c+id)(c-id)}\)</div>
+<div class="eq frag hl">\(=\dfrac{ac+bd}{c^2+d^2}+i\,\dfrac{bc-ad}{c^2+d^2}\)</div>
+<p class="frag">e.g. \(\dfrac{1+i}{1-i}=\dfrac{(1+i)^2}{2}=\dfrac{2i}{2}=i\)</p></div><div class="chat"><div class="row frag"><div class="toon" data-char="girl" data-pose="think"></div><div class="say">Why multiply by the conjugate?</div></div><div class="row r frag"><div class="toon" data-char="prof" data-pose="cheer"></div><div class="say">Because \((c+id)(c-id)=c^2+d^2\) is real. Same trick as rationalising surds!</div></div></div></section>
+
+<section class="slide"><h2>Standard form</h2><p class="small">Illustration 3: express in the form \(a+ib\).</p><div class="cols"><div class="small"><div class="panel"><b class="hl">(i)</b>
+<div class="eq small">\(\dfrac{(1+i)^2}{3-i}=\dfrac{2i}{3-i}\cdot\dfrac{3+i}{3+i}\)</div>
+<div class="eq small frag hl">\(=\dfrac{6i-2}{10}=-\dfrac15+\dfrac35i\)</div></div></div>
+<div class="small"><div class="panel frag"><b class="hl">(ii)</b>
+<div class="eq small">\(\dfrac{1}{1-\cos\theta+2i\sin\theta}=\dfrac{1-\cos\theta-2i\sin\theta}{(1-\cos\theta)^2+4\sin^2\theta}\)</div>
+<div class="eq small frag hl">\(=\dfrac{1-\cos\theta}{2-2\cos\theta+3\sin^2\theta}-i\,\dfrac{2\sin\theta}{2-2\cos\theta+3\sin^2\theta}\)</div></div></div></div></section>
+
+<section class="slide"><h2>Solving for real x and y</h2><div class="small">
+<p>Illustration 6: \(\dfrac{x}{1+2i}+\dfrac{y}{3+2i}=\dfrac{5+6i}{8i-1}\), with \(x,y\in\mathbb R\).</p>
+<div class="eq frag small">\(\dfrac{x(1-2i)}{5}+\dfrac{y(3-2i)}{13}=\dfrac{43-46i}{65}\)</div>
+<div class="eq frag small">\((13x+15y)-i(26x+10y)=43-46i\)</div>
+<p class="frag">Equate real and imaginary parts: \(13x+15y=43\) and \(13x+5y=23\).</p>
+<div class="eq frag hl">\(x=1,\quad y=2\)</div></div></section>
+
+<section class="slide" data-quiz="1"><h2>Your turn</h2><p class="small">Concept Application Exercise 1:</p>
+<ol class="small">
+<li>\(i^{135}\) <span class="frag hl">\(=-i\)</span></li>
+<li>\((-\sqrt{-1})^{4n+3}\) <span class="frag hl">\(=i\)</span></li>
+<li>\(\sqrt{-25}+3\sqrt{-4}+2\sqrt{-9}\) <span class="frag hl">\(=17i\)</span></li>
+<li>\(i^n+i^{n+1}+i^{n+2}+i^{n+3}\) <span class="frag hl">\(=0\)</span></li>
+<li>\((1+i)^6+(1-i)^6\) <span class="frag hl">\(=0\)</span></li>
+<li>\(i^{1+3+5+\dots+(2n+1)}\) <span class="frag hl">\(=i^{(n+1)^2}\)</span></li>
+<li>\(\dfrac{(3-2i)(2+3i)}{(1+2i)(2-i)}\) <span class="frag hl">\(=\dfrac{63}{25}-\dfrac{16}{25}i\)</span></li>
+<li>\(\dfrac{2-\sqrt{-25}}{1-\sqrt{-16}}\) <span class="frag hl">\(=\dfrac{22}{17}+\dfrac3{17}i\)</span></li>
+</ol></section>
+
+<section class="slide"><h2>Summary</h2><div class="small">
+<div class="panel tint frag"><b>Iota:</b> \(i=\sqrt{-1},\ i^2=-1\). \(\mathbb C=\{x+iy:\ x,y\in\mathbb R\}\)</div>
+<div class="panel frag"><b>Powers:</b> \(i^{4n}=1,\ i^{4n+1}=i,\ i^{4n+2}=-1,\ i^{4n+3}=-i\)</div>
+<div class="panel tint frag"><b>Equal:</b> same real part and same imaginary part. No \(\gt\) or \(\lt\) between complex numbers.</div>
+<div class="panel frag"><b>Operations:</b> add and subtract part by part; multiply by expanding with \(i^2=-1\); divide by multiplying by the conjugate.</div>
+<div class="panel tint frag"><b class="bad">Watch out:</b> \(\sqrt a\sqrt b=\sqrt{ab}\) needs one of \(a,b\) non-negative.</div>
+<p class="frag hl">Next class: square roots of complex numbers.</p></div></section>
+</div>
+
+<nav><button id="pv" aria-label="Previous">◀</button><button id="nx" aria-label="Next">▶</button><span id="ct"></span><span class="sp"></span><button id="fs">Fullscreen</button></nav>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+function E(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function T(s,str,x,y,a){const t=E('text',Object.assign({x,y},a||{}),s);t.textContent=str;return t}
+function plane(id,S,ox,oy){const s=document.getElementById(id);s.setAttribute('viewBox','0 0 600 440');const X=x=>ox+S*x,Y=y=>oy-S*y;
+for(let i=-12;i<=12;i++){E('line',{x1:X(i),y1:0,x2:X(i),y2:440,class:'grid'},s);E('line',{x1:0,y1:Y(i),x2:600,y2:Y(i),class:'grid'},s)}
+E('line',{x1:0,y1:oy,x2:600,y2:oy,class:'ax'},s);E('line',{x1:ox,y1:0,x2:ox,y2:440,class:'ax'},s);
+T(s,'Re',565,oy-8);T(s,'Im',ox+8,22);return{s,X,Y}}
+const f=(a,b)=>{a=+a.toFixed(2);b=+b.toFixed(2);let r;if(!b)r=''+a;else{const m=Math.abs(b)==1?'i':Math.abs(b)+'i';r=!a?(b<0?'-':'')+m:a+(b<0?' - ':' + ')+m}return r.replace(/-/g,'−')};
+function tween(ms,fn,done){const t0=performance.now();(function g(t){const k=Math.min(1,(t-t0)/ms);fn(k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2);if(k<1)requestAnimationFrame(g);else if(done)done()})(t0)}
+const $=id=>document.getElementById(id);
+
+/* cartoons */
+document.querySelectorAll('.toon').forEach(d=>{d.innerHTML=chr(d.dataset.char||'prof',d.dataset.pose||'idle')});
+
+/* slide 2: parabola */
+{const P=plane('p2',40,300,380);const pts=[];for(let x=-3;x<=3.001;x+=.1)pts.push((P.X(x))+','+(P.Y(x*x+1)));
+E('polyline',{points:pts.join(' '),class:'parab',pathLength:1},P.s)}
+
+/* slide: powers of i */
+{const P=plane('p5',100,300,220);E('circle',{cx:300,cy:220,r:100,fill:'none',class:'ax'},P.s);let a=1,b=0,busy=false,hist=[f(1,0)];const ln=E('line',{class:'ln'},P.s),dot=E('circle',{r:11,class:'dotb'},P.s),lb=T(P.s,'',0,0);
+function d(x,y,l){ln.setAttribute('x1',P.X(0));ln.setAttribute('y1',P.Y(0));ln.setAttribute('x2',P.X(x));ln.setAttribute('y2',P.Y(y));dot.setAttribute('cx',P.X(x));dot.setAttribute('cy',P.Y(y));lb.setAttribute('x',P.X(x)+16);lb.setAttribute('y',P.Y(y)-14);lb.textContent=l||''}
+function h(){$('h5').innerHTML=hist.join(' → ')}
+$('b5').onclick=()=>{if(busy)return;busy=true;act('spin');const r=Math.hypot(a,b),t0=Math.atan2(b,a);E('circle',{cx:P.X(a),cy:P.Y(b),r:6,class:'ghost'},P.s);
+tween(700,k=>d(r*Math.cos(t0+k*Math.PI/2),r*Math.sin(t0+k*Math.PI/2)),()=>{[a,b]=[-b,a];d(a,b,f(a,b));hist.push(f(a,b));h();busy=false})};
+$('r5').onclick=()=>{if(busy)return;a=1;b=0;hist=[f(1,0)];P.s.querySelectorAll('.ghost').forEach(g=>g.remove());d(1,0,f(1,0));h()};d(1,0,f(1,0));h()}
+
+/* adding arrows */
+{const P=plane('pa',40,300,220);let z=[[2,1],[1,2]],mode=1,which=0,drag=false;
+const L=c=>E('line',{class:c},P.s),d1=L('dash'),d2=L('dash'),lw=L('dash'),l1=L('hi'),l2=L('ln'),ls=L('hi');ls.setAttribute('stroke-width',7);
+const dw=E('circle',{r:8,class:'ghost'},P.s),ds=E('circle',{r:13,class:'ringb'},P.s),c1=E('circle',{r:11,class:'dotb'},P.s),c2=E('circle',{r:11,class:'dotk'},P.s),t1=T(P.s,'',0,0),t2=T(P.s,'',0,0),ts=T(P.s,'',0,0);
+const S2=(l,a,b)=>{l.setAttribute('x1',P.X(a[0]));l.setAttribute('y1',P.Y(a[1]));l.setAttribute('x2',P.X(b[0]));l.setAttribute('y2',P.Y(b[1]))},C=(e,q)=>{e.setAttribute('cx',P.X(q[0]));e.setAttribute('cy',P.Y(q[1]))},TT=(t,q,str)=>{t.setAttribute('x',P.X(q[0])+14);t.setAttribute('y',P.Y(q[1])-12);t.textContent=str};
+function u(){const[a,b]=z,w=mode?b:[-b[0],-b[1]],q=[a[0]+w[0],a[1]+w[1]],O=[0,0];
+S2(l1,O,a);S2(l2,O,b);S2(d1,a,q);S2(d2,w,q);S2(ls,O,q);S2(lw,O,w);lw.style.display=mode?'none':'';
+C(c1,a);C(c2,b);C(ds,q);C(dw,w);dw.style.display=mode?'none':'';TT(t1,a,'z₁');TT(t2,b,'z₂');TT(ts,q,mode?'z₁+z₂':'z₁−z₂');
+$('za1').textContent=f(a[0],a[1]);$('za2').textContent=f(b[0],b[1]);$('zas').textContent=f(q[0],q[1]);$('zal').textContent=mode?'z₁ + z₂':'z₁ − z₂';
+$('zad').textContent=mode?'':'Distance between the points, |z₁ − z₂| = '+Math.hypot(q[0],q[1]).toFixed(2);
+$('ba').classList.toggle('act',!!mode);$('bs').classList.toggle('act',!mode)}
+const pt=e=>{const r=P.s.getBoundingClientRect();return[(e.clientX-r.left)/r.width*600,(e.clientY-r.top)/r.height*440]};
+const mv=e=>{if(!drag)return;const[x,y]=pt(e);z[which]=[Math.max(-3.5,Math.min(3.5,Math.round((x-300)/40*2)/2)),Math.max(-2.5,Math.min(2.5,Math.round((220-y)/40*2)/2))];u()};
+P.s.addEventListener('pointerdown',e=>{const[x,y]=pt(e);const dd=z.map(q=>Math.hypot(P.X(q[0])-x,P.Y(q[1])-y));which=dd[0]<=dd[1]?0:1;drag=true;P.s.setPointerCapture(e.pointerId);mv(e)});
+P.s.addEventListener('pointermove',mv);P.s.addEventListener('pointerup',()=>drag=false);
+$('ba').onclick=()=>{mode=1;u()};$('bs').onclick=()=>{mode=0;u()};u()}
+
+/* square roots of -1 */
+{const P=plane('psq',100,300,220);E('circle',{cx:300,cy:220,r:100,fill:'none',class:'dash'},P.s);const c1=E('circle',{r:11,class:'dotb'},P.s),c2=E('circle',{r:11,class:'dotk'},P.s),l1=T(P.s,'',0,0),l2=T(P.s,'',0,0);
+const pos=(c,l,th)=>{const x=P.X(Math.cos(th)),y=P.Y(Math.sin(th));c.setAttribute('cx',x);c.setAttribute('cy',y);l.setAttribute('x',x+16);l.setAttribute('y',y-12)};
+function at(k){const t=Math.PI/2*(1+k);pos(c1,l1,t);pos(c2,l2,-t);l1.textContent=k==0?'i':(k==1?'(±i)² = −1':'');l2.textContent=k==0?'−i':''}
+let busy=false;$('bq').onclick=()=>{if(busy)return;busy=true;tween(1400,at,()=>busy=false)};$('rq').onclick=()=>{if(!busy)at(0)};at(0)}
+
+/* iota power calculator */
+{const g=()=>{const n=parseInt($('pw').value);if(isNaN(n)){$('pwr').textContent='';return}const q=Math.floor(n/4),r=n-4*q,v=['1','i','−1','−i'][r],m=x=>(''+x).replace('-','−');$('pwr').innerHTML='n = 4('+m(q)+') + '+r+', so i<sup>'+m(n)+'</sup> = i<sup>'+r+'</sup> = <b>'+v+'</b>'};$('pw').oninput=g;g()}
+
+function chr(k,p){return k=='girl'?girl(p):k=='iota'?iota(p):prof(p)}
+function girl(p){return `<svg class="char pose-${p}" viewBox="0 0 120 190" role="img" aria-label="Cartoon student"><g stroke="#3a2418" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<g class="arm al" style="transform-origin:30px 84px"><path d="M30 84L24 120" fill="none" stroke-width="13"/><path d="M30 84L24 120" fill="none" stroke="#f6c9a4" stroke-width="9"/><circle cx="24" cy="121" r="7" fill="#f6c9a4"/></g>
+<g class="arm ar" style="transform-origin:90px 84px"><path d="M90 84L96 120" fill="none" stroke-width="13"/><path d="M90 84L96 120" fill="none" stroke="#f6c9a4" stroke-width="9"/><circle cx="96" cy="121" r="7" fill="#f6c9a4"/></g>
+<path d="M44 150L44 172M76 150L76 172" fill="none" stroke-width="12"/><path d="M44 150L44 172M76 150L76 172" fill="none" stroke="#f6c9a4" stroke-width="8"/>
+<ellipse cx="44" cy="177" rx="13" ry="7" fill="#7a3d5a"/><ellipse cx="76" cy="177" rx="13" ry="7" fill="#7a3d5a"/>
+<path d="M32 112L88 112L98 152L22 152Z" fill="#3d4f8a"/><path d="M38 74L82 74L86 118L34 118Z" fill="#b48ae6"/>
+<path d="M38 74L22 86L28 104L38 98Z" fill="#b48ae6"/><path d="M82 74L98 86L92 104L82 98Z" fill="#b48ae6"/>
+<rect x="54" y="62" width="12" height="14" fill="#e3a984"/><path d="M50 70L60 84L44 80ZM70 70L60 84L76 80Z" fill="#fff"/><path d="M60 84L54 96L60 102L66 96Z" fill="#f08aa8"/>
+<g class="head"><path d="M26 40Q22 4 60 4Q98 4 94 40Q96 56 88 62L32 62Q24 56 26 40Z" fill="#3b2a20"/><path d="M92 28Q118 26 112 62Q108 78 96 72Q106 54 94 42Z" fill="#3b2a20"/><circle cx="93" cy="30" r="4" fill="#f08aa8"/>
+<circle cx="30" cy="44" r="7" fill="#e3a984"/><circle cx="90" cy="44" r="7" fill="#e3a984"/><ellipse cx="60" cy="42" rx="29" ry="31" fill="#f6c9a4"/>
+<path d="M31 38Q34 8 60 8Q86 8 89 38Q74 22 60 26Q46 22 31 38Z" fill="#3b2a20"/>
+<g class="eye"><ellipse cx="49" cy="42" rx="7" ry="8" fill="#fff"/><circle cx="50" cy="43" r="4" fill="#5a3a22" stroke="none"/><circle cx="50" cy="43" r="1.8" fill="#1b1b1b" stroke="none"/><circle cx="51.4" cy="41" r="1.1" fill="#fff" stroke="none"/></g>
+<g class="eye"><ellipse cx="71" cy="42" rx="7" ry="8" fill="#fff"/><circle cx="72" cy="43" r="4" fill="#5a3a22" stroke="none"/><circle cx="72" cy="43" r="1.8" fill="#1b1b1b" stroke="none"/><circle cx="73.4" cy="41" r="1.1" fill="#fff" stroke="none"/></g>
+<circle cx="49" cy="42" r="10.5" fill="#fff" fill-opacity=".2" stroke="#2a2a55" stroke-width="2.5"/><circle cx="71" cy="42" r="10.5" fill="#fff" fill-opacity=".2" stroke="#2a2a55" stroke-width="2.5"/><path d="M59.5 41L60.5 41" stroke="#2a2a55" stroke-width="2.5"/>
+<g class="m1"><path d="M50 56Q60 68 70 56Q60 59 50 56Z" fill="#7a1f1f"/></g><ellipse class="m2" cx="60" cy="61" rx="5" ry="7" fill="#7a1f1f"/>
+<circle cx="40" cy="54" r="4" fill="#f08a7a" stroke="none" opacity=".5"/><circle cx="80" cy="54" r="4" fill="#f08a7a" stroke="none" opacity=".5"/></g></g></svg>`}
+function iota(p){return `<svg class="char pose-${p}" viewBox="0 0 120 190" role="img" aria-label="Cartoon iota"><g stroke="#3a2418" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<g class="arm al" style="transform-origin:42px 118px"><path d="M42 118L26 148" fill="none" stroke-width="12"/><path d="M42 118L26 148" fill="none" stroke="#7da2ff" stroke-width="8"/><circle cx="26" cy="149" r="6" fill="#7da2ff"/></g>
+<g class="arm ar" style="transform-origin:78px 118px"><path d="M78 118L94 148" fill="none" stroke-width="12"/><path d="M78 118L94 148" fill="none" stroke="#7da2ff" stroke-width="8"/><circle cx="94" cy="149" r="6" fill="#7da2ff"/></g>
+<ellipse cx="50" cy="177" rx="14" ry="7" fill="#2f5fd0"/><ellipse cx="70" cy="177" rx="14" ry="7" fill="#2f5fd0"/>
+<rect x="40" y="92" width="40" height="82" rx="20" fill="#7da2ff"/><text x="60" y="152" text-anchor="middle" style="fill:#fff;stroke:none;font:italic 700 40px Georgia,serif">i</text>
+<g class="head" style="transform-origin:60px 82px"><circle cx="60" cy="52" r="30" fill="#7da2ff"/>
+<g class="eye"><ellipse cx="49" cy="50" rx="8" ry="9" fill="#fff"/><circle cx="50" cy="51" r="4.5" fill="#1b1b1b" stroke="none"/><circle cx="51.5" cy="49" r="1.3" fill="#fff" stroke="none"/></g>
+<g class="eye"><ellipse cx="71" cy="50" rx="8" ry="9" fill="#fff"/><circle cx="72" cy="51" r="4.5" fill="#1b1b1b" stroke="none"/><circle cx="73.5" cy="49" r="1.3" fill="#fff" stroke="none"/></g>
+<g class="m1"><path d="M47 68Q60 80 73 68Q60 72 47 68Z" fill="#7a1f1f"/></g><ellipse class="m2" cx="60" cy="71" rx="6" ry="8" fill="#7a1f1f"/>
+<circle cx="38" cy="62" r="4" fill="#fff" stroke="none" opacity=".35"/><circle cx="82" cy="62" r="4" fill="#fff" stroke="none" opacity=".35"/></g></g></svg>`}
+
+/* warm-up: squares of real numbers */
+{const ox=300,oy=320,X=x=>ox+60*x,Y=y=>oy-30*y,sv=$('pnl');sv.setAttribute('viewBox','0 0 600 440');
+for(let i=-4;i<=4;i++)E('line',{x1:X(i),y1:20,x2:X(i),y2:430,class:'grid'},sv);for(let j=-1;j<=9;j+=2)E('line',{x1:20,y1:Y(j),x2:580,y2:Y(j),class:'grid'},sv);
+E('line',{x1:20,y1:oy,x2:580,y2:oy,class:'ax'},sv);E('line',{x1:ox,y1:20,x2:ox,y2:430,class:'ax'},sv);
+const pts=[];for(let x=-3.3;x<=3.31;x+=.1)pts.push(X(x)+','+Y(x*x));E('polyline',{points:pts.join(' '),class:'hi'},sv);
+E('line',{x1:20,y1:Y(-1),x2:580,y2:Y(-1),class:'dash'},sv);T(sv,'y = −1',470,Y(-1)+26);T(sv,'y = x²',X(2.3)+12,Y(5.3));
+const dr=E('line',{class:'dash'},sv),dot=E('circle',{r:11,class:'dotb'},sv);
+function u(){const x=$('sx').value/100,fm=v=>v.toFixed(2).replace('-','−');dot.setAttribute('cx',X(x));dot.setAttribute('cy',Y(x*x));dr.setAttribute('x1',X(x));dr.setAttribute('y1',oy);dr.setAttribute('x2',X(x));dr.setAttribute('y2',Y(x*x));$('sxv').textContent=fm(x);$('sxs').textContent=fm(x*x)}
+$('sx').oninput=u;u()}
+
+/* cartoon teacher */
+function prof(p){return `<svg class="char pose-${p}" viewBox="0 0 120 190" role="img" aria-label="Cartoon teacher"><g stroke="#3a2418" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+<g class="arm al" style="transform-origin:30px 84px"><path d="M30 84L24 120" fill="none" stroke-width="13"/><path d="M30 84L24 120" fill="none" stroke="#f2b48a" stroke-width="9"/><circle cx="24" cy="121" r="7" fill="#f2b48a"/></g>
+<g class="arm ar" style="transform-origin:90px 84px"><path d="M90 84L96 120" fill="none" stroke-width="13"/><path d="M90 84L96 120" fill="none" stroke="#f2b48a" stroke-width="9"/><circle cx="96" cy="121" r="7" fill="#f2b48a"/></g>
+<path d="M38 118L82 118L80 174L63 174L60 142L57 174L40 174Z" fill="#5d8db0"/><ellipse cx="47" cy="178" rx="15" ry="7" fill="#c8721f"/><ellipse cx="73" cy="178" rx="15" ry="7" fill="#c8721f"/>
+<path d="M38 74L82 74L86 118L34 118Z" fill="#8cc3e6"/><rect x="35" y="113" width="50" height="7" fill="#8a4f25"/><rect x="56" y="113" width="8" height="7" fill="#e0b040"/>
+<path d="M38 74L22 86L28 104L38 98Z" fill="#8cc3e6"/><path d="M82 74L98 86L92 104L82 98Z" fill="#8cc3e6"/>
+<rect x="54" y="62" width="12" height="14" fill="#e0996e"/><path d="M50 70L60 86L44 82ZM70 70L60 86L76 82Z" fill="#a9d3ee"/><path d="M56 82L64 82L63 88L57 88ZM57 88L63 88L67 112L60 119L53 112Z" fill="#f08a3c"/>
+<g class="head"><circle cx="30" cy="42" r="7" fill="#e8a47a"/><circle cx="90" cy="42" r="7" fill="#e8a47a"/><ellipse cx="60" cy="40" rx="30" ry="32" fill="#f2b48a"/>
+<path d="M30 36Q26 10 52 9L55 1L63 9L72 1L76 10Q98 12 90 36Q86 22 76 20Q60 26 44 20Q34 24 30 36Z" fill="#6b3f24"/><path d="M41 28Q49 21 56 27M64 27Q71 21 79 28" fill="none" stroke="#6b3f24" stroke-width="3"/>
+<g class="eye"><ellipse cx="49" cy="37" rx="8" ry="9" fill="#fff"/><circle cx="50" cy="38" r="4.5" fill="#8a4f25" stroke="none"/><circle cx="50" cy="38" r="2" fill="#1b1b1b" stroke="none"/><circle cx="51.5" cy="36" r="1.2" fill="#fff" stroke="none"/></g>
+<g class="eye"><ellipse cx="71" cy="37" rx="8" ry="9" fill="#fff"/><circle cx="72" cy="38" r="4.5" fill="#8a4f25" stroke="none"/><circle cx="72" cy="38" r="2" fill="#1b1b1b" stroke="none"/><circle cx="73.5" cy="36" r="1.2" fill="#fff" stroke="none"/></g>
+<ellipse cx="60" cy="47" rx="5" ry="4" fill="#e8a47a"/>
+<g class="m1"><path d="M45 54Q60 72 75 54Q60 58 45 54Z" fill="#7a1f1f"/><path d="M48 55.5Q60 60 72 55.5L71 58Q60 62 49 58Z" fill="#fff" stroke="none"/></g><ellipse class="m2" cx="60" cy="60" rx="6" ry="8" fill="#7a1f1f"/>
+<circle cx="39" cy="52" r="4" fill="#f08a7a" stroke="none" opacity=".5"/><circle cx="81" cy="52" r="4" fill="#f08a7a" stroke="none" opacity=".5"/></g></g></svg>`}
+const MAS={1:{p:'point',t:'Four big ideas today!'},2:{k:'girl',p:'point',t:'Drag x. Can x² ever be negative?'},6:{p:'point',t:'x and y are both real numbers!'},7:{p:'point',t:'Real numbers sit inside ℂ.'},8:{k:'girl',p:'think',t:'Can I say 3 + i > 2 + i?'},9:{p:'think',t:'√a · √b = √ab needs one non-negative.'},14:{p:'idle',t:'Real with real, imaginary with imaginary.'},15:{p:'point',t:'Drag both arrows!'},16:{p:'idle',t:'Expand, then use i² = −1.'},17:{p:'point',t:'Flip the sign of the imaginary part.'},19:{k:'girl',p:'think',t:'Why is the denominator real now?'},20:{p:'think',t:'Equate real and imaginary parts.'},21:{p:'cheer',t:'Your turn!'},22:{p:'cheer',t:'Great work today!'}};
+const mas=document.createElement('div');mas.className='mascot';mas.innerHTML='<div class="mb" id="mb"></div><div id="mc"></div>';document.body.appendChild(mas);$('mc').innerHTML=prof('idle');
+function bub(t){const b=$('mb');b.textContent=t;b.style.animation='none';void b.offsetWidth;b.style.animation=''}
+function mascot(i){const c=MAS[i];mas.style.display=(!c||S[i].querySelector('.toon'))?'none':'';if(!c)return;$('mc').innerHTML=chr(c.k||'prof',c.p);bub(c.t)}
+function cur_char(){return S[cur].querySelector('.char')||$('mc').firstChild}
+function act(k){const sv=cur_char();sv.classList.remove(k);void sv.getBoundingClientRect();sv.classList.add(k);setTimeout(()=>sv.classList.remove(k),950)}
+function wow(v){cur_char().classList.toggle('wow',!!v);const c=MAS[cur];if(c&&c.w&&!S[cur].querySelector('.toon'))bub(v?c.w:c.t)}
+/* deck navigation */
+const S=[...document.querySelectorAll('.slide')];let cur=0;
+function show(i,all){cur=i;S.forEach((s,j)=>s.classList.toggle('on',j==i));S[i].querySelectorAll('.frag').forEach(f=>f.classList.toggle('show',!!all));$('ct').textContent=(i+1)+' / '+S.length;S[i].scrollTop=0;mascot(i)}
+function next(){const h=S[cur].querySelector('.frag:not(.show)');if(h){h.classList.add('show');if(S[cur].dataset.quiz)act('hop1')}else if(cur<S.length-1)show(cur+1,false)}
+function prev(){const sh=[...S[cur].querySelectorAll('.frag.show')];if(sh.length)sh[sh.length-1].classList.remove('show');else if(cur>0)show(cur-1,true)}
+$('nx').onclick=next;$('pv').onclick=prev;
+$('fs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+document.addEventListener('keydown',e=>{if(e.target.tagName=='INPUT')return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next()}else if(['ArrowLeft','PageUp'].includes(e.key))prev();else if(e.key=='f')$('fs').click()});
+show(0,false);
+</script>
+</body>
+</html>
